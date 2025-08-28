@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from scipy.stats import multivariate_normal
 
 
+
 def estimate_covariance():
     values = np.array([
         [0.30, 8.60],
