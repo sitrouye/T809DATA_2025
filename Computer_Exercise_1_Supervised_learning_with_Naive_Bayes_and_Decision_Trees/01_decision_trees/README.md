@@ -18,7 +18,7 @@ The complete dataset contains 150 samples of flowers, 50 of each type.
 ## Part 1
 ### Part 1.1
 
-We can calculate impurity of data for a given class $\mathcal{C}_i$ so long as we know the probability the data belonging to that class (given that we are in the leaf node $S_j$. We use a shorthand notation for this and say:
+We can calculate impurity of data for a given class $\mathcal{C}_i$ so long as we know the probability the data belonging to that class (given that we are in the leaf node $S_j$). We use a shorthand notation for this and say:
 
 $$
 P\{\mathcal{C}_i\}=P\{x\in  \mathcal{C}_i|S_j\}
