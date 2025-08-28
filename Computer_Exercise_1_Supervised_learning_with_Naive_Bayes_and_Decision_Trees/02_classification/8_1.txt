@@ -1,1 +1,9 @@
 Question A :
+The accuracy for the first dataset is very low : around 0.47. It means it is very hard to discriminate between both distributions because there is a lot of overlap.
+However in the second set, the accuracy is 1, which means the maximum likelihood estimation allowed to perfectly predict which dataset the points were belonging to. The means were further apart, and the standard deviations were lower, so there was very little overlap between the two distributions.
+
+
+Question B : 
+1.When increasing the number of datapoints, the approximation of the parameters of the gaussian becomes better, so the accuracy rises.
+2.At fixed standard deviation, the further appart the means, the easiest it is to discriminate between the two distributions, because there is less overlap.
+3.At fixed means, the lower the standard deviation, the easiest it is to discriminate between the two distributions, because there is less overlap.
