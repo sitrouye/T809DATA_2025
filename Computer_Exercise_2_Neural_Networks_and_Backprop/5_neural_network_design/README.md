@@ -24,31 +24,6 @@ Questions
 2. Calculate the confusion matrix for the image classification task.
 3. Explain what Autograd is and how it works?
 
-## Section 2
-### Section 2.1
-The neural network used in the first example is a typical neural network with hidden layers. For text generation we need a bit more complicated networks, for example RNN.
-
-Your second task is to use the [tutorial for text generation](https://pytorch.org/tutorials/intermediate/char_rnn_generation_tutorial.html). You might also find the [text classification tutorial](https://pytorch.org/tutorials/intermediate/char_rnn_classification_tutorial.html) helpful.
-
-Questions:
-1. What is RNN?
-2. Why do we use RNN when we are working with text?
-3. In your opinion, how well does the text generation work? 
-4. Name three other domains where RNNs are suitable model types for regression/classification
-
-
-## What to turn in to Gradescope
-*Read this carefully before you submit your solution.*
-
-This is an individual project so you can of course help each other out but your report should be your own.
-
-Files to turn in:
-
-- `report.pdf`
-
-Make sure the file names are exact. 
-
-
 ## Independent section (optional)
 This is an open ended independent question. You are welcome to try other tutorials in the PyTorch documentation, design a model that achieves some task on Icelandic text, create your own model like the one in `example.py` or anything else you come up with.
 
