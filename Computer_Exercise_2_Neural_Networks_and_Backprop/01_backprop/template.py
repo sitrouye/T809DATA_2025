@@ -8,14 +8,17 @@ def sigmoid(x: float) -> float:
     '''
     Calculate the sigmoid of x
     '''
-    ...
+    if x < -100:
+        return 0
+    else :
+        return 1/(1+np.exp(-x))
 
 
 def d_sigmoid(x: float) -> float:
     '''
     Calculate the derivative of the sigmoid of x.
     '''
-    ...
+    return sigmoid(x)*(1-sigmoid(x))
 
 
 def perceptron(
@@ -27,7 +30,8 @@ def perceptron(
     the result of applying the sigmoid activation
     to the weighted sum
     '''
-    ...
+    wsum = np.dot(x,w)
+    return wsum, sigmoid(wsum)
 
 
 def ffnn(
@@ -41,7 +45,14 @@ def ffnn(
     Computes the output and hidden layer variables for a
     single hidden layer feed-forward neural network.
     '''
-    ...
+    y = 0
+    z0 = 0
+    z1 = 0
+    a1 = 0
+    a2 = 0
+
+    
+    return y,z0,z1,a1,a2
 
 
 def backprop(
