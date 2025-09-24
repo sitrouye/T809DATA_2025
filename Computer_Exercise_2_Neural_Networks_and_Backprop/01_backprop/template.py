@@ -45,13 +45,27 @@ def ffnn(
     Computes the output and hidden layer variables for a
     single hidden layer feed-forward neural network.
     '''
-    y = 0
-    z0 = 0
-    z1 = 0
-    a1 = 0
-    a2 = 0
+    print(f"x = {x}")
+    z0 = np.append([1.0], x)
 
+    a1 = np.zeros(M)
+    z = np.zeros(M)
+
+    for m in range(M):
+        ws, sigws = perceptron(z0, W1[:,m])
+        z[m] = sigws
+        a1[m] = ws
+
+    z1 = np.append([1.0], z)
     
+
+    a2 = np.zeros(K)
+    y = np.zeros(K)
+    for k in range(K):
+        ws, sigws = perceptron(z1, W2[:,k])
+        y[k] = sigws
+        a2[k] = ws
+
     return y,z0,z1,a1,a2
 
 
@@ -67,7 +81,30 @@ def backprop(
     Perform the backpropagation on given weights W1 and W2
     for the given input pair x, target_y
     '''
-    ...
+
+    y,z0,z1,a1,a2 = ffnn(x,M,K,W1,W2)
+
+    deltaK = np.zeros(K)
+    for k in range(K):
+        deltaK[k] = y[k] - target_y[k]
+
+    deltaJ = np.zeros(M)
+    for j in range(M):
+        deltaJ[j] = d_sigmoid(a1[j])*np.sum([W2[j+1,k]*deltaK[k] for k in range(K)])
+    
+
+    dE1 = np.zeros(np.shape(W1))
+    dE2 = np.zeros(np.shape(W2))
+    for i in range(len(x)+1):
+        for j in range(M) : 
+            dE1[i,j] = deltaJ[j]*z0[i]
+            
+    for j in range(M+1):
+        for k in range(K) : 
+            dE2[j,k] = deltaK[k]*z1[j]
+
+
+    return y, dE1, dE2
 
 
 def train_nn(
@@ -88,7 +125,10 @@ def train_nn(
     3. Backpropagating the error through the network to adjust
     the weights.
     '''
-    ...
+    for i in range(len(X_train)):
+        y,z0,z1,a1,a2 = ffnn(X_train[i],M,K,W1,W2) #output variables for 1 set of features
+
+        
 
 
 def test_nn(
