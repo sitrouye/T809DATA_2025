@@ -125,11 +125,26 @@ def train_nn(
     3. Backpropagating the error through the network to adjust
     the weights.
     '''
-    for i in range(len(X_train)):
-        y,z0,z1,a1,a2 = ffnn(X_train[i],M,K,W1,W2) #output variables for 1 set of features
+    W1_upd = W1
+    W2_upd = W2
+    for it in range (iterations) :
 
+        for i in range(len(X_train)):
+            # y,z0,z1,a1,a2 = ffnn(X_train[i],M,K,W1,W2) #output variables for 1 set of features
+
+            y, dE1, dE2 = backprop(X_train[:,i], t_train[:,i], M, K, W1_upd,W2_upd)
         
+            W1_upd = W1_upd - eta * dE1 #update the weights
+            W2_upd = W2_upd - eta * dE2
 
+        W1_upd = W1_upd/len(X_train) #mean over all the training data
+        W2_upd = W2_upd/len(X_train)
+
+        # missclass = 
+        it += 1
+    
+    
+    return 
 
 def test_nn(
     X: np.ndarray,
