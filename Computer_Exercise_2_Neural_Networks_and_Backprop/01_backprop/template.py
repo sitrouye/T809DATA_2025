@@ -45,7 +45,7 @@ def ffnn(
     Computes the output and hidden layer variables for a
     single hidden layer feed-forward neural network.
     '''
-    print(f"x = {x}")
+    # print(f"x = {x}")
     z0 = np.append([1.0], x)
 
     a1 = np.zeros(M)
@@ -127,24 +127,44 @@ def train_nn(
     '''
     W1_upd = W1
     W2_upd = W2
+    misclass = np.zeros(iterations)
+    E_total = []
+    N, _ = np.shape(X_train)
+    
     for it in range (iterations) :
-
-        for i in range(len(X_train)):
+        dE1_tot = np.zeros(np.shape(W1))
+        dE2_tot = np.zeros(np.shape(W2))
+        guess = []
+        loss = 0
+        for i in range(N):
             # y,z0,z1,a1,a2 = ffnn(X_train[i],M,K,W1,W2) #output variables for 1 set of features
+            target = np.zeros(K)
+            target[t_train[i]] = 1
+            y, dE1, dE2 = backprop(X_train[i,:], target, M, K, W1_upd,W2_upd)
+            classif = np.argmax(y)
+            for j in range(K):
+                # loss += (y[j] - target[j])**2 #sum of squares
+                loss -= target[j]*np.log(y[j])+ (1-target[j])*np.log(1-y[j]) #cross entropy
+            # if classif == t_train[i]:
+                # guess.append(1)
+            # else :
+            if  classif != t_train[i]:
+                misclass[it] += 1/N
+                # guess.append(0)
+            guess.append(int(classif))
+                
+            dE1_tot += dE1
+            dE2_tot += dE2
+        # total_loss += loss
 
-            y, dE1, dE2 = backprop(X_train[:,i], t_train[:,i], M, K, W1_upd,W2_upd)
+        W1_upd = W1_upd - eta*dE1_tot/N #mean over all the training data
+        W2_upd = W2_upd - eta*dE2_tot/N 
+        E_total.append(float(loss/N))
+
         
-            W1_upd = W1_upd - eta * dE1 #update the weights
-            W2_upd = W2_upd - eta * dE2
-
-        W1_upd = W1_upd/len(X_train) #mean over all the training data
-        W2_upd = W2_upd/len(X_train)
-
-        # missclass = 
         it += 1
     
-    
-    return 
+    return W1_upd, W2_upd, E_total, misclass, guess
 
 def test_nn(
     X: np.ndarray,
@@ -157,7 +177,14 @@ def test_nn(
     Return the predictions made by a network for all features
     in the test set X.
     '''
-    ...
+    N, _ = np.shape(X)
+    guesses = np.zeros(N)
+    for i in range(N):
+        y, _, _, _, _ = ffnn(X[i,:],  M, K, W1,W2)
+        classif = int(np.argmax(y))
+        guesses[i] = classif
+    return guesses
+
 
 
 if __name__ == "__main__":
