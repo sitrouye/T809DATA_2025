@@ -145,17 +145,15 @@ def train_nn(
             for j in range(K):
                 # loss += (y[j] - target[j])**2 #sum of squares
                 loss -= target[j]*np.log(y[j])+ (1-target[j])*np.log(1-y[j]) #cross entropy
-            # if classif == t_train[i]:
-                # guess.append(1)
-            # else :
+            
             if  classif != t_train[i]:
                 misclass[it] += 1/N
-                # guess.append(0)
+
             guess.append(int(classif))
                 
             dE1_tot += dE1
             dE2_tot += dE2
-        # total_loss += loss
+
 
         W1_upd = W1_upd - eta*dE1_tot/N #mean over all the training data
         W2_upd = W2_upd - eta*dE2_tot/N 
@@ -180,8 +178,9 @@ def test_nn(
     N, _ = np.shape(X)
     guesses = np.zeros(N)
     for i in range(N):
-        y, _, _, _, _ = ffnn(X[i,:],  M, K, W1,W2)
-        classif = int(np.argmax(y))
+        y, _, _, _, _ = ffnn(X[i,:], M, K, W1, W2)
+        
+        classif = np.argmax(y)
         guesses[i] = classif
     return guesses
 

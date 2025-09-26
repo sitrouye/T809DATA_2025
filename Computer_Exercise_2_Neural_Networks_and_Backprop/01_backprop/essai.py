@@ -4,7 +4,7 @@ from typing import Union
 import numpy as np
 import sklearn.datasets as datasets
 
-
+from matplotlib import pyplot as plt
 
 
 
@@ -114,8 +114,37 @@ features, targets, classes = load_iris()
 
 
 
-# initialize the random seed to get predictable results
+# # initialize the random seed to get predictable results
 np.random.seed(1234)
+
+K = 3  # number of classes
+M = 6
+D = train_features.shape[1]
+
+# # Initialize two random weight matrices
+W1 = 2 * np.random.rand(D + 1, M) - 1
+W2 = 2 * np.random.rand(M + 1, K) - 1
+W1tr, W2tr, Etotal, misclassification_rate, last_guesses = train_nn(
+    train_features[:20, :], train_targets[:20], M, K, W1, W2, 500, 0.1)
+
+
+# print(f'W1tr = {W1tr}')
+# print(f'W2tr = {W2tr}')
+# print(f'Etotal = {Etotal}')
+# print(f'misclass = {misclassification_rate}')
+# print(f'last_guess = {last_guesses}')
+
+guess = test_nn(train_features[:20, :], M, K, W1tr, W2tr)
+print(f'guesses = {guess}')
+print(f'targets = {train_targets[:20]}')
+
+##section 2.3
+
+np.random.seed(1234)
+
+features, targets, classes = load_iris()
+(train_features, train_targets), (test_features, test_targets) = split_train_test(features, targets)
+
 
 K = 3  # number of classes
 M = 6
@@ -125,16 +154,34 @@ D = train_features.shape[1]
 W1 = 2 * np.random.rand(D + 1, M) - 1
 W2 = 2 * np.random.rand(M + 1, K) - 1
 W1tr, W2tr, Etotal, misclassification_rate, last_guesses = train_nn(
-    train_features[:20, :], train_targets[:20], M, K, W1, W2, 500, 0.1)
+    train_features, train_targets, M, K, W1, W2, 500, 0.1)
 
-
-print(f'W1tr = {W1tr}')
-print(f'W2tr = {W2tr}')
-print(f'Etotal = {Etotal}')
-print(f'misclass = {misclassification_rate}')
-print(f'last_guess = {last_guesses}')
-
-guess = test_nn(train_features[:20, :], M, K, W1, W2)
+guess = test_nn(features, M, K, W1tr, W2tr)
 print(f'guesses = {guess}')
+print(f'targets = {targets}')
 
+
+conf_matrix = np.zeros((K,K))
+accuracy = 0
+I = len(guess)
+for i in range(I):
+    if guess[i] == targets[i]:
+        accuracy += 1
+    guessi = int(guess[i])
+    conf_matrix[targets[i],guessi] += 1
+
+
+
+accuracy = accuracy/I
+print('accuracy : ', accuracy)
+print('confusion matrix : ', conf_matrix)
+
+X = np.arange(len(Etotal))
+plt.plot(X, Etotal, label = 'total error' )
+
+X = np.arange(len(misclassification_rate))
+plt.plot(X, misclassification_rate, label = 'misclassification rate')
+plt.xlabel('number of iterations')
+plt.legend()
+plt.show()
 
