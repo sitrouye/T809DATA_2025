@@ -1,6 +1,6 @@
-# Author: 
-# Date:
-# Project: 
+# Author: Elvire Besnard
+# Date:16/10/25
+# Project: computer exercise 3 DMML
 # Acknowledgements: 
 #
 
@@ -17,6 +17,7 @@ from sklearn.decomposition import PCA
 from tools import load_cancer
 
 
+
 def standardize(X: np.ndarray) -> np.ndarray:
     '''
     Standardize an array of shape [N x 1]
@@ -28,7 +29,18 @@ def standardize(X: np.ndarray) -> np.ndarray:
     (np.ndarray): A standardized version of X, also
     of shape [N x 1]
     '''
-    ...
+    X_m = np.mean(X, axis = 0)
+    X_sig = np.std(X, axis = 0)
+
+    N, f = np.shape(X)
+    X_hat = []
+    for i in range(N) :
+        X_hat.append([])
+        for j in range(f):
+            X_hat[i].append((X[i][j] - X_m[j])/X_sig[j])
+
+    return np.array(X_hat)
+
 
 
 def scatter_standardized_dims(
@@ -45,12 +57,22 @@ def scatter_standardized_dims(
     * i (int): The first index
     * j (int): The second index
     '''
-    ...
+    X_hat = standardize(X)
+    N, f = np.shape(X)
+    X_hat_1 = [X_hat[k][i] for k in range(N)]
+    X_hat_2 = [X_hat[k][j] for k in range(N)]
+    plt.scatter(X_hat_1, X_hat_2, s= 9)
 
 
 def _scatter_cancer():
     X, y = load_cancer()
-    ...
+    plt.figure()
+    # X = X[:5]
+    N, f = np.shape(X)
+    print('N = ', N)
+    for i in range(f):
+        plt.subplot(5,6,i+1)
+        scatter_standardized_dims(X, 0, i)
 
 
 def _plot_pca_components():

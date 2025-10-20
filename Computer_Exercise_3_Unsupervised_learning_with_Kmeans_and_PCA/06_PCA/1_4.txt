@@ -1,0 +1,2 @@
+Seeing this plot, we can deduce that dimensions 3 and 4 correlate best with dimension 1, as well as dimensions 21, 23 and 24 but it is not as clear. Particularly dimension 3.
+Those dimensions are  the perimeter and area mean of the tumor, which are related to the radius linearly and quadratically respectively.
