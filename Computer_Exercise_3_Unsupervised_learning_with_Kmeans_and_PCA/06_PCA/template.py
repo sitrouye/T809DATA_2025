@@ -76,16 +76,26 @@ def _scatter_cancer():
 
 
 def _plot_pca_components():
-    ...
+    pca = PCA()
     X, y = load_cancer()
-    for i in range(...):
-        plt.subplot(5, 6, ...)
-        ...
+    pca.fit_transform(standardize(X))
+    comps = pca.components_
+    print(np.shape(comps))
+    for i in range(len(comps)):
+        ax = plt.subplot(5,6, i + 1)
+        plt.plot(comps[i])
+        ax.get_xaxis().set_visible(False)
+        plt.title(f"PCA {i+1}")
     plt.show()
 
 
 def _plot_eigen_values():
-    ...
+    pca = PCA()
+    X, y = load_cancer()
+    pca.fit_transform(standardize(X))
+    lambs = pca.explained_variance_
+
+    plt.plot(np.arange(len(lambs)), lambs, )
     plt.xlabel('Eigenvalue index')
     plt.ylabel('Eigenvalue')
     plt.grid()
@@ -93,7 +103,12 @@ def _plot_eigen_values():
 
 
 def _plot_log_eigen_values():
-    ...
+    pca = PCA()
+    X, y = load_cancer()
+    pca.fit_transform(standardize(X))
+    lambs = pca.explained_variance_
+    log_lambs = np.log10(lambs)
+    plt.plot(np.arange(len(lambs)), log_lambs)
     plt.xlabel('Eigenvalue index')
     plt.ylabel('$\log_{10}$ Eigenvalue')
     plt.grid()
@@ -101,7 +116,14 @@ def _plot_log_eigen_values():
 
 
 def _plot_cum_variance():
-    ...
+    pca = PCA()
+    X, y = load_cancer()
+    pca.fit_transform(standardize(X))
+    lambs = pca.explained_variance_
+    cumu_lambs = np.cumsum(lambs)
+    cumu_lambs = cumu_lambs/cumu_lambs[len(cumu_lambs)-1]
+    plt.plot(np.arange(len(lambs)), cumu_lambs)
+    
     plt.xlabel('Eigenvalue index')
     plt.ylabel('Percentage variance')
     plt.grid()

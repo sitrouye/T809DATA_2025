@@ -38,7 +38,12 @@ def distance_matrix(
     where out[i, j] is the euclidian distance between X[i, :]
     and Mu[j, :]
     '''
-    pass
+    out = [[0 for i in range(len(Mu))]for j in range(len(X))]
+    for i in range(len(X)):
+        for j in range(len(Mu)):
+            out[i][j] = np.linalg.norm(X[i]-Mu[j])
+
+    return out
 
 
 def determine_r(dist: np.ndarray) -> np.ndarray:
@@ -53,7 +58,13 @@ def determine_r(dist: np.ndarray) -> np.ndarray:
     out (np.ndarray): A [n x k] array where out[i, j] is
     1 if sample i is closest to prototype j and 0 otherwise.
     '''
-    pass
+    r = [[0 for i in range(len(dist[0]))]for i in range(len(dist))]
+    for i in range(len(dist)):
+        j = np.argmin(dist[i])
+        r[i][j] = 1
+
+
+    return r
 
 
 def determine_j(R: np.ndarray, dist: np.ndarray) -> float:
@@ -70,7 +81,11 @@ def determine_j(R: np.ndarray, dist: np.ndarray) -> float:
     Returns:
     * out (float): The value of the objective function
     '''
-    pass
+    P = R*dist
+
+    J = np.sum(P)/len(dist)
+
+    return J
 
 
 def update_Mu(
@@ -90,8 +105,16 @@ def update_Mu(
     Returns:
     out (np.ndarray): A [k x f] array of updated prototypes.
     '''
-    pass
-
+    K,F = np.shape(Mu)
+    N = len(X)
+    mu_den = np.sum(R, axis = 0)
+    mu_num = np.zeros((K, F))
+    for f in range(F):
+        for k in range(K):
+            for n in range(N):
+                mu_num[k][f] +=  R[n][k]*X[n][f] 
+    Mu_out = [mu_num[k]/mu_den[k] for k in range(K)]
+    return np.array(Mu_out)
 
 def k_means(
     X: np.ndarray,
@@ -108,14 +131,19 @@ def k_means(
     nn = sk.utils.shuffle(range(X_standard.shape[0]))
     Mu = X_standard[nn[0: k], :]
 
-    # !!! Your code here !!!
 
     # Then we have to "de-standardize" the prototypes
     for i in range(k):
         Mu[i, :] = Mu[i, :] * X_std + X_mean
+    Js = []
 
-    # !!! Your code here !!!
+    for m in range(num_its):
+        dist = distance_matrix(X, Mu)
+        R = determine_r(X_standard, Mu)
+        Js.append(determine_j(R, dist))
+        Mu = update_Mu(Mu, X_standard, R)
 
+    return Mu, R, Js
 
 def _plot_j():
     pass
